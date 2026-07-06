@@ -149,6 +149,33 @@
     }
   }
 
+  function initMap() {
+    const mapEl = document.getElementById("map-canvas");
+    if (!mapEl || typeof L === "undefined") return;
+
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl:
+        "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+      iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+      shadowUrl:
+        "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+    });
+
+    const taipei101 = [25.0339, 121.5645];
+    const map = L.map(mapEl, {
+      scrollWheelZoom: false,
+    }).setView(taipei101, 14);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(map);
+
+    L.marker(taipei101).addTo(map).bindPopup("台北 101");
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     initTheme();
     if (themeToggle) {
@@ -158,5 +185,6 @@
     initSmoothScroll();
     initReveal();
     initYear();
+    initMap();
   });
 })();
